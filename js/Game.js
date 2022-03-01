@@ -21,9 +21,22 @@ Game = function(canvasId) {
         _this.scene.render();
     });
 
+    //Permet au jeu de tourner
+    engine.runRenderLoop(function() {
+        // Récuperer le ratio par les fps
+        _this.fps = Math.round(1000/engine.getDeltaTime());
+
+        // Checker le mouvement du joueur en lui envoyant le ratio de déplacement
+        _player._checkMove((_this.fps)/60);
+
+        _this.scene.render();
+
+    });
+
     //Ajuste la vue 3D si la fenetre est agrandie ou diminuée
     window.addEventListener("resize", function() {
-        if (engine) {
+        if (engine) 
+        {
             engine.resize();
         }
     }, false);
