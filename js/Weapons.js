@@ -79,16 +79,17 @@ Weapons.prototype = {
             direction = direction.pickedPoint.subtractInPlace(this.Player.camera.position);
             direction = direction.normalize();
 
-            this.createRocket(this.Player.camera, direction)
+            this.createRocket(this.Player.camera.playerBox)
             this.canFire = false;
         } else {
             //Nothing to do : cannot fire
         }
     },
 
-    createRocket : function(playerPosition, direction) {
+    createRocket : function(playerPosition) {
         var positionValue = this.rocketLauncher.absolutePosition.clone();
         var rotationValue = playerPosition.rotation;
+        var Player = this.Player;
         var newRocket = BABYLON.Mesh.CreateBox("rocket", 1, this.Player.game.scene);
         newRocket.direction = new BABYLON.Vector3(
             Math.sin(rotationValue.y) * Math.cos(rotationValue.x),
@@ -139,11 +140,11 @@ Weapons.prototype = {
                     explosionRadius.registerAfterRender(function() {
                         explosionRadius.material.alpha -=0.02;
                         if (explosionRadius.material.alpha<=0){
-                            explosionRadius.dispose();
+                            //explosionRadius.dispose(); //Pour les ombres on le desactive
                         }
                     });
                 }
-                newRocket.dispose();
+                //newRocket.dispose(); //Pour les ombres on le desactive
             }
 
         })
