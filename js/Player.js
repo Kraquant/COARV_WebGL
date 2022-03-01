@@ -12,6 +12,9 @@ Player = function(game, canvas) {
     //Axe de mouvement X et Z
     this.axisMovement = [false, false, false, false];
 
+    //Activation du tir ou non
+    this.weaponShoot = false;
+
     window.addEventListener("keyup", function(evt) {
         switch(evt.keyCode) {
             case 90:
@@ -57,6 +60,25 @@ Player = function(game, canvas) {
         }
     }, false);
 
+    var canvas = this.game.scene.getEngine().getRenderingCanvas();
+
+    // On affecte le clic et on vérifie qu'il est bien utilisé dans la scène (_this.controlEnabled)
+    canvas.addEventListener("mousedown", function(evt) {
+
+        if (_this.controlEnabled && !_this.weponShoot) {
+            _this.weponShoot = true;
+            _this.handleUserMouseDown();
+        }
+    }, false);
+
+    // On fais pareil quand l'utilisateur relache le clic de la souris
+    canvas.addEventListener("mouseup", function(evt) {
+        if (_this.controlEnabled && _this.weponShoot) {
+            _this.weponShoot = false;
+            _this.handleUserMouseUp();
+        }
+    }, false);
+
     //Initialisation de la caméra
     this._initCamera(this.scene, canvas);
     this.controlEnabled = false;
@@ -71,11 +93,13 @@ Player.prototype = {
         // Axe de mouvement X et Z
         this.camera.axisMovement = [false, false, false, false];
 
-        //Si le joueur est en vie ou non
-        this.isAlive = true;
-        
         //On demande a la camera de regarder a l'origine
         this.camera.setTarget(BABYLON.Vector3.Zero());
+
+        this.camera.weapons = new Weapons(this);
+
+        //Vie du joueur
+        this.isAlive = true;
     },
 
     _initPointerLock : function() {
@@ -123,6 +147,18 @@ Player.prototype = {
 
         if (this.camera.axisMovement[3]) {
             this.camera.position = new BABYLON.Vector3(this.camera.position.x + Math.sin(this.camera.rotation.y + degToRad(-90)) * - relativeSpeed, this.camera.position.y, this.camera.position.z + Math.cos(this.camera.rotation.y + degToRad(-90)) * - relativeSpeed);
+        }
+    },
+
+    handleUserMouseDown : function() {
+        if(this.isAlive === true) {
+            this.camera.weapons.fire();
+        }
+    },
+
+    handleUserMouseUp : function() {
+        if(this.isAlive === true) {
+            this.camera.weapons.stopFire();
         }
     },
 };
