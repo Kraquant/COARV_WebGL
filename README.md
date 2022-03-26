@@ -1,6 +1,6 @@
 # COARV_WebGL
 Créé par LESKERPIT Morgan
-Etudiant ingénieurs en option réalité virtuelle à l'Ecole Centrale de Nantes
+Etudiant ingénieur en option réalité virtuelle à l'Ecole Centrale de Nantes
 
 
 ########## Réalisé dans le cadre de la matière COARV ##########
